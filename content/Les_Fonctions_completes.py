@@ -1114,92 +1114,153 @@ def Reconnaissance_Faciale(Photo_Compar_Base):
 #     rep=input("   **   Désolé..  La base de donnée est vide pour l'instant.    Tapez Entrée : ")
 
 
-# #########################################################################################################""
-
-def Visualiser_Gerer_Base_de_donnees():
+# ######################################################################################################################################################################################
+def Input_choix_Gestion(change):
+    Choix_gestion = change['new']
+    if Choix_gestion == "1":
+        Choix_gestion_1()
+    elif Choix_gestion == "2":
+        Choix_gestion_2()
+    # print()
+    # print("Récupération du choix = ",Photo_Compar_Base)
+    # Reconnaissance_Faciale(Photo_Compar_Base)
+#     return Photo_Compar_Base
+###################################################################
+def Visualiser_Base_de_donnees():
     # elif reponse==3:
-    print()
-    contin=0
-    while contin==0:
+    # print()
+    # contin=0
+    # while contin==0:
+    os.chdir(Lieu)
+    affich_image("Logo3.jpg")
+    Choix_gestion_1()
+    # print()
+    # print("Vous pouvez : ")
+    # # print("\n            * Choix N° 0 :  Quitter.")
+    # print("\n            * Choix N° 1 :  Visualiser le contenu de la base de données. ")
+    # print("            * Choix N° 2 :  Effacer des éléments de la base de données.")
+    # print()
+    # rep=input("\n            --> : ")
+    # rep=int(rep)
+    # if rep==0:
+    #     contin=1
+    ####
+    # list_choix_gestion = [" _ ", "1", "2"]
+    # Choix_gestion=widgets.RadioButtons(
+    #             options=list_choix_gestion,
+    #     value=" _ ",
+    #             layout={'width': 'max-content'}
+    #         )
+    # Choix_gestion.observe(Input_choix_Gestion,names='value')
+    # ###########################################
+    # display(Choix_gestion)
+###################################################################
+def Choix_gestion_1():
+# elif rep==1:
+    ###########################################""
+    try:
+        Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
+        #pickle_in=open("C:/Users/dfial/Desktop/Travail_Python/Image/Photographie_Num/Py_Face/Base_de_Donnees/Baz_Analyz_Photos.pickle","rb")
+        pickle_in=open(Name_local_baz,"rb")
+        Baz_Donnees_Photos_lu=pickle.load(pickle_in)
+        pickle_in.close()
+        long_Baz_Donnees_Photos_lu=len(Baz_Donnees_Photos_lu)
+        print("long_Baz_Donnees_Photos_lu=",long_Baz_Donnees_Photos_lu)
+        print("\n             ==> Voici les photos analysées présentes dans la base de données :")
+        for tt in range(long_Baz_Donnees_Photos_lu):
+            print("\n                      * N°_",tt+1," :     Titre : ",Baz_Donnees_Photos_lu[tt][0])
+            os.chdir(Lieu+"/Base_de_Donnees")
+            Name_horizon=Baz_Donnees_Photos_lu[tt][2]
+            affich_image(Name_horizon)
+            Name_vertical=Baz_Donnees_Photos_lu[tt][6]
+            affich_image(Name_vertical)
+#                        poz=input("                                                                         --> Tapez Entrée pour voir le suivant : ")
         os.chdir(Lieu)
-        affich_image("Logo3.jpg")
+        # print("\n Il n'y a plus d'autres éléments dans la base de donnée.")
+        # poz=input("\n Remontez l'écran pour visualiser toutes les photos et noter les N°.. puis, Tapez Entrée.. : ")
+    except FileNotFoundError:
+        print("   **   Désolé..  La base de donnée est vide pour l'instant.")
+
+################################################################
+##############################################################################
+def Input_choix_Donnees_Photo_Suprim(change):
+    Num_photo_Donnee_suprim = change['new']
+    Suprim_Donnee_photo_num(Num_photo_Donnee_suprim)
+    # print()
+    # print("Récupération du choix = ",Photo_Compar_Base)
+    # Reconnaissance_Faciale(Photo_Compar_Base)
+#     return Photo_Compar_Base
+###################################################################
+def Supprimer_element_Base_de_donnees():
+# elif rep==2:
+    try:
+        Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
+        #pickle_in=open("C:/Users/dfial/Desktop/Travail_Python/Image/Photographie_Num/Py_Face/Base_de_Donnees/Baz_Analyz_Photos.pickle","rb")
+        pickle_in=open(Name_local_baz,"rb")
+        Baz_Donnees_Photos_lu=pickle.load(pickle_in)
+        pickle_in.close()
+        print("\n     ==> Vous souhaitez effacer les données de quelle photo ? ")
         print()
-        print("Vous souhaitez : ")
-        print("\n            * Choix N° 0 :  Quitter.")
-        print("\n            * Choix N° 1 :  Visualiser le contenu de la base de données. ")
-        print("            * Choix N° 2 :  Effacer des éléments de la base de données.")
-        print()
-        rep=input("\n            --> : ")
-        rep=int(rep)
-        if rep==0:
-            contin=1
-        elif rep==1:
-            ###########################################""
-            try:
-                Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
-                #pickle_in=open("C:/Users/dfial/Desktop/Travail_Python/Image/Photographie_Num/Py_Face/Base_de_Donnees/Baz_Analyz_Photos.pickle","rb")
-                pickle_in=open(Name_local_baz,"rb")
-                Baz_Donnees_Photos_lu=pickle.load(pickle_in)
-                pickle_in.close()
-                long_Baz_Donnees_Photos_lu=len(Baz_Donnees_Photos_lu)
-                print("long_Baz_Donnees_Photos_lu=",long_Baz_Donnees_Photos_lu)
-                print("\n             ==> Voici les photos analysées présentes dans la base de données :")
-                for tt in range(long_Baz_Donnees_Photos_lu):
-                    print("\n                      * N°_",tt+1," :     Titre : ",Baz_Donnees_Photos_lu[tt][0])
-                    os.chdir(Lieu+"/Base_de_Donnees")
-                    Name_horizon=Baz_Donnees_Photos_lu[tt][2]
-                    affich_image(Name_horizon)
-                    Name_vertical=Baz_Donnees_Photos_lu[tt][6]
-                    affich_image(Name_vertical)
-    #                        poz=input("                                                                         --> Tapez Entrée pour voir le suivant : ")
-                os.chdir(Lieu)
-                print("\n Il n'y a plus d'autres éléments dans la base de donnée.")
-                poz=input("\n Remontez l'écran pour visualiser toutes les photos et noter les N°.. puis, Tapez Entrée.. : ")
-            except FileNotFoundError:
-                rep=input("   **   Désolé..  La base de donnée est vide pour l'instant.    Tapez Entrée : ")
+        long_Baz_Donnees_Photos_lu=len(Baz_Donnees_Photos_lu)
+        List_num = [" _ "]
+        for yy in range(long_Baz_Donnees_Photos_lu):
+            print("                      * N°_",yy+1," :     Titre : ",Baz_Donnees_Photos_lu[yy][0])
+            List_num.append(yy+1)
+        print("\n                                                     Cliquer sur le N° de l'analyse de photo que vous souhaitez supprimer : ")
+        
+        Choix_num_suprim=widgets.RadioButtons(
+                    options=List_num,
+            value=" _ ",
+                    layout={'width': 'max-content'}
+                )
+        Choix_num_suprim.observe(Input_choix_Donnees_Photo_Suprim,names='value')
+        ###########################################
+        display(Choix_num_suprim)
+        # question=question.lower()
+        # if question=="q":
+        #     contin=1
+        # else:
+    except FileNotFoundError:
+        print("   **   Désolé..  Un ou plusieurs fichiers nont pas été trouvé...")       
+def Suprim_Donnee_photo_num(Num_photo_Donnee_suprim):
+    question = Num_photo_Donnee_suprim
+    Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
+    #pickle_in=open("C:/Users/dfial/Desktop/Travail_Python/Image/Photographie_Num/Py_Face/Base_de_Donnees/Baz_Analyz_Photos.pickle","rb")
+    pickle_in=open(Name_local_baz,"rb")
+    Baz_Donnees_Photos_lu=pickle.load(pickle_in)
+    pickle_in.close()
+    long_Baz_Donnees_Photos_lu = len(Baz_Donnees_Photos_lu)
+    print("Vous avez demandé à supprimer les données de la photo N°",question," : ",Baz_Donnees_Photos_lu[question-1][0])
+    # print("Baz_Donnees_Photos_lu[question-1] = ",Baz_Donnees_Photos_lu[question-1])
+    del Baz_Donnees_Photos_lu[question-1]
+    # print("Données effacées du tableau")
+    try:
+        # print("coucou")
+        # question=int(question)
+        if question<1 or question>long_Baz_Donnees_Photos_lu:
+            print("\n Désolé, je n'ai pas compris... ")
+        else:
+            # print("Dans else...")
+            # print("\n **** Vous souhaitez vraiment effacer les données sur la photo nommée",Baz_Donnees_Photos_lu[question-1][0],"? (o/n)")
+            # vraiment=input("\n                                                                       _ _ _  : ")
+            # vraiment=vraiment.lower()
+            # if vraiment=="n":
+            #     contin=1
+            # elif vraiment=="o":
 
 
-        elif rep==2:
-            try:
-                Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
-                #pickle_in=open("C:/Users/dfial/Desktop/Travail_Python/Image/Photographie_Num/Py_Face/Base_de_Donnees/Baz_Analyz_Photos.pickle","rb")
-                pickle_in=open(Name_local_baz,"rb")
-                Baz_Donnees_Photos_lu=pickle.load(pickle_in)
-                pickle_in.close()
-                print("\n     ==> Vous souhaitez effacer les données de quelle photo ? ")
-                print()
-                long_Baz_Donnees_Photos_lu=len(Baz_Donnees_Photos_lu)
-                for yy in range(long_Baz_Donnees_Photos_lu):
-                    print("                      * N°_",yy+1," :     Titre : ",Baz_Donnees_Photos_lu[yy][0])
-                question=input("\n                                                     Tapez son N°  ..ou Q pour Quitter : ")
-                question=question.lower()
-                if question=="q":
-                    contin=1
-                else:
-                    try:
-                        question=int(question)
-                        if question<1 or question>long_Baz_Donnees_Photos_lu:
-                            poz=input("\n Désolé, je n'ai pas compris... Recommencez : ")
-                        else:
-                            print("\n **** Vous souhaitez vraiment effacer les données sur la photo nommée",Baz_Donnees_Photos_lu[question-1][0],"? (o/n)")
-                            vraiment=input("\n                                                                       _ _ _  : ")
-                            vraiment=vraiment.lower()
-                            if vraiment=="n":
-                                contin=1
-                            elif vraiment=="o":
-                                del Baz_Donnees_Photos_lu[question-1]
-                                Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
-                                #pickle_out=open("C:/Users/dfial/Desktop/Travail_Python/Image/Photographie_Num/Py_Face/Base_de_Donnees/Baz_Analyz_Photos.pickle","wb+")
-                                pickle_out=open(Name_local_baz,"wb+")
-                                pickle.dump(Baz_Donnees_Photos_lu,pickle_out)
-                                pickle_out.close()
+            # Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
+            Name_local_baz = "/drive/Base_de_Donnees/Baz_Analyz_Photos.pickle"
+            #pickle_out=open("C:/Users/dfial/Desktop/Travail_Python/Image/Photographie_Num/Py_Face/Base_de_Donnees/Baz_Analyz_Photos.pickle","wb+")
+            pickle_out=open(Name_local_baz,"wb+")
+            pickle.dump(Baz_Donnees_Photos_lu,pickle_out)
+            pickle_out.close()
+            print("... ça y est, la donnée a été supprimée.")
+#             else:
+#                 poz=input("\n Désolé, je n'ai pas compris... Recommencez : ")
+    except ValueError:
+        print("\n Désolé, je n'ai pas pu supprimer la photo...")
 
-                            else:
-                                poz=input("\n Désolé, je n'ai pas compris... Recommencez : ")
-                    except ValueError:
-                        poz=input("\n Désolé, je n'ai pas compris... Recommencez : ")
-            except FileNotFoundError:
-                rep=input("   **   Désolé..  La base de donnée est vide pour l'instant.    Tapez Entrée : ")
 
 ###################################
 
