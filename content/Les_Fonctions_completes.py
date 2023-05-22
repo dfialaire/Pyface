@@ -34,6 +34,10 @@ def get_imlist(path):
 #########################################################
 """ Charge une image dans une matrice avec le module pil """
 def charg_image_pil(path,titre_image):
+    # Lieu = os.getcwd()
+    # path = Lieu + "/Portraits_a_analyser" # Transfo du code pour Pyface
+    path = '/drive/Portraits_a_analyser'
+    # print("path =",path)
     os.chdir(path)
     pil_im = Image.open(titre_image)
     return pil_im
@@ -540,39 +544,21 @@ def Lign_horizont(Photo_initiale):
     newmatrice_img=Accolade_photo(a,b,mode)   ##y##
     #######################################"
     return Nom4,Nom5,newmatrice_img,hauteur_image     ##y##
-######################################################################"
-def Analyse_une_nouvelle_photo():
-    print("\n Placer votre nouvelle photo dans le dossier ' Portraits_a_analyser '.")
-    poz=input("\n           ...Quand c'est fait, appuyez sur Entrée.. : ")
-    os.chdir(Lieu+"/Portraits_a_analyser")
-    list_fichiers=os.listdir('.')
-    longueur_list_fichiers=len(list_fichiers)
-    ###########################################
-    print("\nVous souhaitez lancer l'analyse sur quelle photo (donner son N°)")
-    print("\n            * Choix N° 0 :  Quitter.")
-    print()
-    for l in range(longueur_list_fichiers):
-        long_list_fichiers=len(list_fichiers[l])
-
-        fin_nom_fichier_lu=list_fichiers[l][long_list_fichiers-4:long_list_fichiers]
-        Deb_nom_fichier_lu=list_fichiers[l][0:2]
-
-        if fin_nom_fichier_lu==".png" or fin_nom_fichier_lu==".jpg":
-            if Deb_nom_fichier_lu!="~$":
-                print("            * Choix N°",l+1,": ",list_fichiers[l],".")
-            else:
-                z=1
-        else:
-            z=1
-    print()
-    numero_texte=input("\n              ==> : ")
-    numero_texte=int(numero_texte)
-    if numero_texte==0:
-        print("\n            OK...     A bientôt.")
-        continuer=0
+######################################################################
+def Analyse_une_nouvelle_photo_suite(change):
+    ##
+    choix = change['new']
+    # numero_texte=input("\n              ==> : ")
+    # numero_texte=int(numero_texte)
+    if choix == " _ ":
+        rien = 1
+    # if numero_texte==0:
+    #     print("\n            OK...     A bientôt.")
+    #     continuer=0
     else:
     ####################################################################
-        Photo_initiale=list_fichiers[numero_texte-1]
+        # Photo_initiale=list_fichiers[numero_texte-1]
+        Photo_initiale= choix
         Nom4,Nom5,newmatrice_img,hauteur_image=Lign_horizont(Photo_initiale)   ##y##
         Nom4_vert,Nom5_vert,newmatrice_vert_img,hauteur_image_vert=Lign_verticale(Photo_initiale)   ##x##
         print("##############################################")
@@ -660,6 +646,46 @@ def Analyse_une_nouvelle_photo():
                 pickle.dump(Baz_Donnees_Photos_lu,pickle_out)
                 pickle_out.close()
     #                poz=input("pause2 après avoir enregistré le 2ème enregistrement")
+####################################################################
+def Analyse_une_nouvelle_photo():
+    # print("\n Placer votre nouvelle photo dans le dossier ' Portraits_a_analyser '.")
+    # poz=input("\n           ...Quand c'est fait, appuyez sur Entrée.. : ")
+    os.chdir(Lieu+"/Portraits_a_analyser")
+    list_fichiers=os.listdir('.')
+    longueur_list_fichiers=len(list_fichiers)
+    ###########################################
+    print("\nVous souhaitez lancer l'analyse sur quelle photo..")
+    # print("\n            * Choix N° 0 :  Quitter.")
+    print()
+    for l in range(longueur_list_fichiers):
+        long_list_fichiers=len(list_fichiers[l])
+
+        fin_nom_fichier_lu=list_fichiers[l][long_list_fichiers-4:long_list_fichiers]
+        Deb_nom_fichier_lu=list_fichiers[l][0:2]
+
+        if fin_nom_fichier_lu==".png" or fin_nom_fichier_lu==".jpg":
+            if Deb_nom_fichier_lu!="~$":
+                rien = 1
+                # print("            * Choix N°",l+1,": ",list_fichiers[l],".")
+            else:
+                z=1
+        else:
+            z=1
+    print()
+    ##
+    list_fichiers = [" _ "] + list_fichiers
+    Align_Horizontal_Vignet(list_fichiers)
+    ####
+    # list_fichiers.append(" _ ")
+    Choix_Photo=widgets.RadioButtons(
+                options=list_fichiers,
+        value=" _ ",
+                layout={'width': 'max-content'}
+            )
+    Choix_Photo.observe(Analyse_une_nouvelle_photo_suite,names='value')
+    ###########################################
+    display(Choix_Photo) 
+
     ##################################################################"
 def Analyse_une_serie_de_photo_enrichissement_Base_de_donnees():
     # elif reponse==2:
