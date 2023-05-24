@@ -1,7 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
 import pickle
 from ipywidgets import widgets
 import numpy
@@ -16,7 +12,6 @@ from PIL import Image
 from PIL import ImageChops
 import os
 import sys, time
-# from Comparateur import *
 Lieu = os.getcwd()
 ##############################################################################
 def Input_choix_Photo_Compare(change):
@@ -25,7 +20,6 @@ def Input_choix_Photo_Compare(change):
     print()
     print("Récupération du choix = ",Photo_Compar_Base)
     Reconnaissance_Faciale(Photo_Compar_Base)
-#     return Photo_Compar_Base
 ###################################################################
 """ Retourne une liste d'images jpeg dans un répertoire précis """
 def get_imlist(path):
@@ -34,10 +28,7 @@ def get_imlist(path):
 #########################################################
 """ Charge une image dans une matrice avec le module pil """
 def charg_image_pil(path,titre_image):
-    # Lieu = os.getcwd()
-    # path = Lieu + "/Portraits_a_analyser" # Transfo du code pour Pyface
     path = '/drive/Portraits_a_analyser'
-    # print("path =",path)
     os.chdir(path)
     pil_im = Image.open(titre_image)
     return pil_im
@@ -77,17 +68,13 @@ def Align_Horizontal_Vignet(Liste_Photos):
 #############################################################################
 def Position_lign(fichier,mode):
     os.chdir(Lieu+"/Travail_Brouillon")
-    ## matrice = cv.imread(fichier, 0) ## Pb cv2 ## cv.imread remplacé par Image.open
     matrice = Image.open(fichier)
     matrice=matrice.convert('L')   ##x##
     tab_matrice=np.array(matrice)   ##x##
-    #print(matrice.shape)
     list1=[]
     ##################################################
     largeur_image=matrice.size[0]   ##x##
     hauteur_image=matrice.size[1]   ##x##
-#    print("x=hauteur_image=",hauteur_image)
-#    print("y=largeur_image=",largeur_image)
     ###################################################
     if mode==1:
         for x in range(hauteur_image):
@@ -105,7 +92,6 @@ def Position_lign(fichier,mode):
                 list1.append(listo)
             else:
                 z=1
-#    print("list1 : ",list1)
     return list1
 ######################################################################
 def lissage(list1):
@@ -127,11 +113,9 @@ def calcul_distance(list4):
         distance=list4[i+1]-list4[i]
         list5.append(distance)
     list5.sort()
-#    print("liste croissante des distances entres positions=",list5)
     somme=sum(list5)
     long_list5=len(list5)
     mini=min(list5)
-#    print("mini=",mini)
     for bb in range(long_list5):
         valo=list5[bb]
         vali=round(valo/mini,2)
@@ -146,7 +130,6 @@ def quantite(tri1,tri2):
     return(d)
 def contours(image,Nom4,seuil):
     (c,l)=image.size
-    # imagearrivee=Image.new('RGB',(c,l))
     imagearrivee=Image.new('L',(c,l))
     for x in range(1,c-1):
         for y in range(1,l-1):
@@ -167,24 +150,18 @@ def contours(image,Nom4,seuil):
             q7=quantite(p,p7)
             p8=image.getpixel((x+1,y+1))
             q8=quantite (p,p8)
-            #somme=q1+q2+q3+q4+q5+q6+q7+q8
-            #print("somme=",somme)
             if q1+q2+q3+q4+q5+q6+q7+q8<seuil:
-                # imagearrivee.putpixel((x,y),(255,255,255))
                 imagearrivee.putpixel((x,y),(255))
             else :
-                # imagearrivee.putpixel((x,y),(0,0,0))
                 imagearrivee.putpixel((x,y),(0))
     imagearrivee.save(Nom4)
 #############################################################################
 #################################  verticale
 def quantite_vert(tri1,tri2):
-    # d=(tri1[0]-tri2[0])**2+(tri1[1]-tri2[1])**2+(tri1[2]-tri2[2])**2
     d=((tri1-tri2)**2)
     return(d)
 def contours_vert(image,Nom4,seuil):
     (c,l)=image.size
-    # imagearrivee=Image.new('RGB',(c,l))
     imagearrivee=Image.new('L',(c,l))
     for x in range(1,c-1):
         for y in range(1,l-1):
@@ -207,11 +184,8 @@ def contours_vert(image,Nom4,seuil):
             q8=quantite_vert (p,p8)
             #val=(8*p)- (p2+p7)
             if q1+q2+q3+q4+q5+q6+q7+q8<seuil:
-            #if val < seuil:
-                # imagearrivee.putpixel((x,y),(255,255,255))
                 imagearrivee.putpixel((x,y),(255))
             else :
-                # imagearrivee.putpixel((x,y),(0,0,0))
                 imagearrivee.putpixel((x,y),(0))
     imagearrivee.save(Nom4)
 #############################################################################
@@ -225,17 +199,12 @@ def Accolade_photo(a,b,mode):
     tab_matrice_portrait = np.array(matrice_portrait)
     largeur_image_portrait=matrice_portrait.size[0]
     hauteur_image_portrait=matrice_portrait.size[1]
-    #print("largeur_image_portrait=",largeur_image_portrait)
-    #print("hauteur_image_portrait=",hauteur_image_portrait)
-    #############################################################################
     #############################################################################
     matrice_portrait_inv = Image.open(b, "r")
     matrice_portrait_inv= matrice_portrait_inv.convert('L')
     tab_matrice_portrait_inv = np.array(matrice_portrait_inv)
     largeur_image_portrait_inv=matrice_portrait_inv.size[0]
     hauteur_image_portrait_inv=matrice_portrait_inv.size[1]
-    #print("largeur_image_portrait_inv=",largeur_image_portrait_inv)
-    #print("hauteur_image_portrait_inv=",hauteur_image_portrait_inv)
     #############################################################################
     if hauteur_image_portrait>hauteur_image_portrait_inv:
         xmax=hauteur_image_portrait
@@ -256,11 +225,9 @@ def Accolade_photo(a,b,mode):
             newmatrice[x,ypos]=tab_matrice_portrait_inv[x,y],tab_matrice_portrait_inv[x,y],tab_matrice_portrait_inv[x,y]
     ######################################################################
     if mode==1:
-        ## cv.imwrite("newmat.png", newmatrice) ## remplacé par : matrice.save('gray-pillow.jpeg', 'jpeg')
         newmatrice_img = Image.fromarray(newmatrice)
         newmatrice_img.save("newmat.jpg", "JPEG")
     else:
-        ##.imwrite("newmat_vert.png", newmatrice)
         newmatrice_img = Image.fromarray(newmatrice)
         newmatrice_img.save("newmat_vert.jpg", "JPEG")
     return newmatrice_img       ##y##
@@ -272,20 +239,15 @@ def Lign_verticale(Photo_initiale):
     long_Photo_initiale=len(Photo_initiale)
     for a in range(long_Photo_initiale-4):
         Deb_Photo_initiale=Deb_Photo_initiale+Photo_initiale[a]
-#    print("\nAnalyse de l'image :'",Deb_Photo_initiale,"' .")
-    #Deb_Photo_initiale=
     os.chdir(Lieu+"/Portraits_a_analyser")
     matrice = Image.open(Photo_initiale, "r")
     matrice=matrice.convert('L') ##x##
-    #print(matrice.shape)
     ##################################################
     os.chdir(Lieu+"/Travail_Brouillon")
   #######################################################
     largeur_image=matrice.size[0] ##x##
     hauteur_image_vert=largeur_image
     hauteur_image=matrice.size[1] ##x##
-    #print("x=hauteur_image=",hauteur_image)
-    #print("y=largeur_image=",largeur_image)
   #######################################################
     Rotatematrice = numpy.empty((largeur_image,hauteur_image, 3), dtype = numpy.uint8)
     #print("Rotatematrice.shape=",Rotatematrice.shape)
@@ -294,69 +256,42 @@ def Lign_verticale(Photo_initiale):
         for y in range(largeur_image):
 
             Rotatematrice[largeur_image-1-y,x]=tab_matrice[x,y],tab_matrice[x,y],tab_matrice[x,y]
-    ## cv.imwrite("photo_retourn.png", Rotatematrice)
     Rotatematrice_img=Image.fromarray(Rotatematrice)##x##
-    #print("Rotatematrice_img.size=",Rotatematrice_img.size)
     Rotatematrice_img=Rotatematrice_img.convert('L')
-    #print("Après Convert, Rotatematrice_img.size=",Rotatematrice_img.size)
     Rotatematrice_img.save("photo_retourn.jpg", "JPEG")##x##
     #########################################################
     tab_moy_vertical=np.zeros((largeur_image,1),dtype='i')
-    #print("tab_moy_vertical.shape=",tab_moy_vertical.shape)
-    #poz=input("poz")
     for x in range(largeur_image):
         somme=0
         for y in range(hauteur_image):    ##x##
             val=Rotatematrice_img.getpixel((y,x))    ##x##
-            #print("val =",val)
-            #poz=input()
             somme=somme+val    ##x##
         moyenne=somme/hauteur_image    ##x##
         tab_moy_vertical[x][0]=moyenne    ##x##
-        ## tab_moy_vertical[x][0]=Rotatematrice[x].mean()   ## Good pour Horizontal ## .mean innaccessible
     #######################################################
     newmatrice_vert = numpy.empty((hauteur_image, largeur_image, 3), dtype = numpy.uint8)
-    #for x in range(hauteur_image):    ##x##
-        #for y in range(largeur_image):    ##x##
-    #        print("tab_moy_horizon[x][0]=",tab_moy_horizon[x][0])
-    #        poz=input()
-            #newmatrice_vert[x,y]=matrice[x,y],matrice[x,y],matrice[x,y]    ##x##
-    ## cv.imwrite("base_pour_Verticale.png", newmatrice_vert)
     newmatrice_vert = np.array(matrice)    ##x##
     ############################################
     Newmatrice_vert_img=Image.fromarray(newmatrice_vert)##x##
     Newmatrice_vert_img.save("base_pour_Verticale.jpg", "JPEG")    ##x##
-#    print("voici la base_pouVerticale")
-#    affich_image("base_pouVerticale.png")
-#    poz=input()
     #####################################################
     newImg = numpy.empty((largeur_image,hauteur_image, 3), dtype = numpy.uint8)
     for x in range(largeur_image):
         for y in range(hauteur_image):
             newImg[x,y]=[tab_moy_vertical[x][0],tab_moy_vertical[x][0],tab_moy_vertical[x][0]]
-    ## cv.imwrite("barres verticales.png", newImg)
     newImg_img=Image.fromarray(newImg)##x##
     newImg_img.save("barres verticales.jpg", "JPEG")    ##x##
-
     po_clai=newImg*2
-    ## cv.imwrite("po_clai.png", po_clai)
     po_clai_img=Image.fromarray(po_clai)    ##x##
     po_clai_img.save("po_clai.jpg", "JPEG")    ##x##
-#    print("voici poclais")
-#    affich_image("barres verticales.png")
-#    affich_image("po_clai.png")
-#    poz=input()
-    #print("##############################################
+    ##############################################
     Nom1=Deb_Photo_initiale+"_matrice_Vert.jpg"    ##x##
-    ## cv.imwrite(Nom1, newmatrice_vert)
     newmatrice_vert_img=Image.fromarray(newmatrice_vert)    ##x##
     newmatrice_vert_img.save(Nom1, "JPEG")    ##x##
     #######################################################
     Nom2=Deb_Photo_initiale+"_matrice_barre_Vert.jpg"    ##x##
-    ## portrait_barr = cv2.addWeighted(Rotatematrice, 0.4, po_clai, 0.6, 0) ## Modif par Blend de Pil
     Rotatematrice_img=Rotatematrice_img.convert('L')    ##x##
     im_size = Rotatematrice_img.size    ##x##
-    #print("size rotamatrice_img=",im_size)
     portrait_barr = Image.new('L', im_size)
     po_clai_img=po_clai_img.convert('L')    ##x##
     portrait_barr = ImageChops.blend(Rotatematrice_img, po_clai_img, 0.6)    ##x##
@@ -367,7 +302,6 @@ def Lign_verticale(Photo_initiale):
         for y in range(largeur_image):
             portrait_barr_retourn[x][y]=tab_portrait_barr[largeur_image-1-y][x]    ##x##
 ######################################################################
-    ## cv.imwrite(Nom2, portrait_barr_retourn)
     portrait_barr_retourn_img=Image.fromarray(portrait_barr_retourn)    ##x##
     portrait_barr_retourn_img.save(Nom2, "JPEG")    ##x##
     Nom3=Deb_Photo_initiale+"_barre_Vert.jpg"    ##x##
@@ -379,7 +313,6 @@ def Lign_verticale(Photo_initiale):
     po_clai_retourn_img=Image.fromarray(po_clai_retourn)    ##x##
     po_clai_retourn_img.save("po_clai_retourn_img.jpg", "JPEG")
 ######################################################################
-    ## cv.imwrite(Nom3, po_clai_retourn)
     po_clai_retourn_img=Image.fromarray(po_clai_retourn)    ##x##
     po_clai_retourn_img.save(Nom3, "JPEG")    ##x##
     ###############################
@@ -390,7 +323,6 @@ def Lign_verticale(Photo_initiale):
     contours_vert(im,Nom4_vert,seuil_vertical)
     ########################
     NewNom4 = Image.open(Nom4_vert)
-    ## portrait_lignes = cv2.addWeighted(newmatrice_vert, 0.5, NewNom4, 0.5, 0)
     im_size = newmatrice_vert.shape    ##x##
     portrait_lignes = Image.new('L', im_size)
     newmatrice_vert_img=Image.fromarray(newmatrice_vert)    ##x##
@@ -398,7 +330,6 @@ def Lign_verticale(Photo_initiale):
     NewNom4=NewNom4.convert('L')    ##x##
     portrait_lignes = ImageChops.blend(newmatrice_vert_img, NewNom4, 0.5)    ##x##
     Nom5_vert=Deb_Photo_initiale+"_ligne_seule_Vert.jpg"    ##x##
-    ## cv.imwrite(Nom5_vert, portrait_lignes) 
     portrait_lignes.save(Nom5_vert, "JPEG")    ##x##
     ##############################
     a=Nom1
@@ -425,7 +356,6 @@ def Lign_horizont(Photo_initiale):
     long_Photo_initiale=len(Photo_initiale)
     for a in range(long_Photo_initiale-4):
         Deb_Photo_initiale=Deb_Photo_initiale+Photo_initiale[a]
-
     os.chdir(Lieu+"/Portraits_a_analyser")
     matrice = Image.open(Photo_initiale, "r")
     matrice= matrice.convert('L')
@@ -434,96 +364,57 @@ def Lign_horizont(Photo_initiale):
     ##################################################
     largeur_image=matrice.size[0]
     hauteur_image=matrice.size[1]
-    #print("largeur=",largeur_image," et hauteur=",hauteur_image)
-    #poz=input()
     #########################################################
     tab_moy_horizon=np.zeros((hauteur_image,1),dtype='i')
     for y in range(hauteur_image):
-
         somme=0
         for x in range(largeur_image):
             val=matrice.getpixel((x,y))
-            #print("val =",val)
-            #poz=input()
             somme=somme+val
         moyenne=somme/largeur_image
         tab_moy_horizon[y][0]=moyenne
-        ## tab_moy_horizon[x][0]=matrice[x].mean() ## .mean innaccessible d'où boucle
     #######################################################
     newmatrice = numpy.empty((hauteur_image, largeur_image, 3), dtype = numpy.uint8)
-    # for x in range(hauteur_image):
-    #    for y in range(largeur_image):
-            # print("type newmatrice=",type(newmatrice))
-            # print("type matrice=",type(matrice))
-            # poz=input("poz")
-            #  newmatrice[x,y]=(ice(x,y),matrice(x,y),matrice(x,y))
     newmatrice = np.array(matrice)
             ###########################
     newImg = numpy.empty((hauteur_image, largeur_image, 3), dtype = numpy.uint8)
     for x in range(hauteur_image):
         for y in range(largeur_image):
-    #        print("tab_moy_horizon[x][0]=",tab_moy_horizon[x][0])
-    #        poz=input()
             newImg[x,y]=[tab_moy_horizon[x][0],tab_moy_horizon[x][0],tab_moy_horizon[x][0]]
-    #print("size newImg=", newImg.shape)
-    #poz=input()
     #####################################################
     po_clai=newImg*3
-    #print("size po_clai=new_img*3 =", po_clai.shape)
     po_clai_img = Image.fromarray(po_clai)
-    #print("taille image po_clai_img=",po_clai_img.size)
-    #poz=input()
-    #print("##############################################
+    ##############################################
     Nom1=Deb_Photo_initiale+"_matrice.jpeg"
-    ## cv.imwrite(Nom1, newmatrice)
     newmatrice_img = Image.fromarray(newmatrice) # Transformation du tableau en image PIL
     newmatrice_img.save(Nom1, "JPEG")
     #######################################################
     Nom2=Deb_Photo_initiale+"_matrice_barre.jpeg"
-    ## portrait_barr = cv2.addWeighted(newmatrice_img, 0.4, po_clai_img, 0.6, 0)
     im_size = newmatrice_img.size
-    #print("im_size=",im_size)
-    #print("type newmatrice=", type(newmatrice))
-    #print("type size=", type(im_size))
-    #poz=input()
     portrait_barr = Image.new('L', im_size)
-    #print("size newmatrice_img=", newmatrice_img.size)
-    #print("size po_clai_img=", po_clai_img.size)
     po_clai_img.save("po_clai_img.jpeg", "JPEG")
-    #poz=input()
     im1=newmatrice_img
     im2=po_clai_img
-    #print("type im1=", type(im1))
-    #print("type im2=", type(im2))
     im1= im1.convert('L')
     im2= im2.convert('L')
     portrait_barr = ImageChops.blend(im1, im2, 0.55)
-    ## cv.imwrite(Nom2, portrait_barr)
     portrait_barr.save(Nom2, "JPEG")
-    ## aVANT #cv.imwrite(Nom2, newImg)
     Nom3=Deb_Photo_initiale+"_barre.jpg"
-    ## cv.imwrite(Nom3, po_clai)
     im2.save(Nom3, "JPEG")
-    ##################################"
     ###############################
     Nom4=Deb_Photo_initiale+"_ligne.jpg"
     im=Image.open(Nom3)
     seuil_horizon=750 # modif 750
     contours(im,Nom4,seuil_horizon)
     ########################
-    ########################
     NewNom4 = Image.open(Nom4)
-    ## portrait_lignes = cv2.addWeighted(newmatrice, 0.5, NewNom4, 0.5, 0)
     im_size = newmatrice.shape
     portrait_lignes = Image.new('L', im_size)
     newmatrice_img = Image.fromarray(newmatrice)
     newmatrice_img=newmatrice_img.convert('L')
     NewNom4=NewNom4.convert('L')
-    #print("type NewNom4=", type(NewNom4))
-    #print("type newmatrice_img=", type(newmatrice_img))
     portrait_lignes = ImageChops.blend(newmatrice_img, NewNom4, 0.5)
     Nom5=Deb_Photo_initiale+"_ligne_seule.jpg"
-    ## cv.imwrite(Nom5, portrait_lignes)
     portrait_lignes.save(Nom5, "JPEG")
     ##############################
     a=Nom1
@@ -537,7 +428,6 @@ def Lign_horizont(Photo_initiale):
     a="newmat.jpg"
     b=Nom4
     Accolade_photo(a,b,mode)
-    #######################################"
     #################################################
     a="newmat.jpg"
     b=Nom5
@@ -548,16 +438,10 @@ def Lign_horizont(Photo_initiale):
 def Analyse_une_nouvelle_photo_suite(change):
     ##
     choix = change['new']
-    # numero_texte=input("\n              ==> : ")
-    # numero_texte=int(numero_texte)
     if choix == " _ ":
         rien = 1
-    # if numero_texte==0:
-    #     print("\n            OK...     A bientôt.")
-    #     continuer=0
     else:
     ####################################################################
-        # Photo_initiale=list_fichiers[numero_texte-1]
         Photo_initiale= choix
         Nom4,Nom5,newmatrice_img,hauteur_image=Lign_horizont(Photo_initiale)   ##y##
         Nom4_vert,Nom5_vert,newmatrice_vert_img,hauteur_image_vert=Lign_verticale(Photo_initiale)   ##x##
@@ -565,17 +449,13 @@ def Analyse_une_nouvelle_photo_suite(change):
         print("\n     --> Voici le résultat des analyses graphiques :")
         affich_image("newmat.jpg")   ##x##
         affich_image("newmat_vert.jpg")   ##x##
-    #            quest=input("""\n    (En fonction de la qualité des positionnements des lignes horizontales et verticales caractéristiques du visage),
-    #                          Souhaitez vous enregistrer cette analyse dans la base de données ? (o/n) : """)
-        quest="o"  ###### à enlever si on veut que soit poser la question précédente.. c'est pour gagner du temps
+        quest="o" 
         quest=quest.lower()
         if quest=="n":
             z=1
         else:
             os.chdir(Lieu+"/Base_de_Donnees")
-            ## cv.imwrite(Nom4, newmatrice)
             newmatrice_img.save(Nom4, "JPEG")   ##x##
-            ## cv.imwrite(Nom4_vert, newmatrice_vert)
             newmatrice_vert_img.save(Nom4_vert, "JPEG")   ##x##
             os.chdir(Lieu+"/Portraits_a_analyser")
             fichier=Nom4
@@ -587,7 +467,6 @@ def Analyse_une_nouvelle_photo_suite(change):
             print("""  ==>  Voici la liste des distances (raccourcies par""",mini,""") entre les lignes horizontales :
                 """,list6,"""
                 : Cela constitue le matricule d'identification horizontal de cette photo.""")
-    #                poz=input("\n                   .. Appuyez sur Entrée : ")
             ######################################################################################
             fichier=Nom4_vert
             mode=2
@@ -598,9 +477,6 @@ def Analyse_une_nouvelle_photo_suite(change):
             print("""  ==>  Voici la liste des distances (raccourcies par""",mini_vert,""") entre les lignes verticales :
                 """,list6_vert,"""
                 : Cela constitue le matricule d'identification vertical de cette photo.""")
-    #                poz=input("\n                   .. Appuyez sur Entrée : ")
-
-
     #######################################################################################################################"
     #####################""   Test s'il y a déjà un élément en base de donnée ?
             Presence_BD=0
@@ -608,7 +484,6 @@ def Analyse_une_nouvelle_photo_suite(change):
                 New_Baz_Donnees_Photos=[Photo_initiale,list6,Nom4,mini,hauteur_image,list6_vert,Nom4_vert,mini_vert,hauteur_image_vert]
                 ###########################################
                 Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
-                # pickle_in=open("C:/Users/dfial/Desktop/Travail_Python/Image/Photographie_Num/Py_Face/Base_de_Donnees/Baz_Analyz_Photos.pickle","rb")
                 pickle_in=open(Name_local_baz,"rb")
                 Baz_Donnees_Photos_lu=pickle.load(pickle_in)
                 pickle_in.close()
@@ -622,34 +497,24 @@ def Analyse_une_nouvelle_photo_suite(change):
                 ####################################################################
                 Baz_Donnees_Photos_init=[[Photo_initiale,list6,Nom4,mini,hauteur_image,list6_vert,Nom4_vert,mini_vert,hauteur_image_vert]]
                 Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
-                #pickle_out=open("C:/Users/dfial/Desktop/Travail_Python/Image/Photographie_Num/Py_Face/Base_de_Donnees/Baz_Analyz_Photos.pickle","wb+")
                 pickle_out=open(Name_local_baz,"wb+")
                 pickle.dump(Baz_Donnees_Photos_init,pickle_out)
                 pickle_out.close()
-
                 #####################################"""
-
             else:
-
                 New_Baz_Donnees_Photos=[Photo_initiale,list6,Nom4,mini,hauteur_image,list6_vert,Nom4_vert,mini_vert,hauteur_image_vert]
                 ###########################################
                 Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
-                #pickle_in=open("C:/Users/dfial/Desktop/Travail_Python/Image/Photographie_Num/Py_Face/Base_de_Donnees/Baz_Analyz_Photos.pickle","rb")
                 pickle_in=open(Name_local_baz,"rb")
                 Baz_Donnees_Photos_lu=pickle.load(pickle_in)
                 pickle_in.close()
-    #                print("Voici ce qu'il y a pour l'instant dans la base de données :",Baz_Donnees_Photos_lu)
-    #                poz=input("pause1")
                 Baz_Donnees_Photos_lu.append(New_Baz_Donnees_Photos)
                 ############################################""
                 pickle_out=open(Name_local_baz,"wb+")
                 pickle.dump(Baz_Donnees_Photos_lu,pickle_out)
                 pickle_out.close()
-    #                poz=input("pause2 après avoir enregistré le 2ème enregistrement")
 ####################################################################
 def Analyse_une_nouvelle_photo():
-    # print("\n Placer votre nouvelle photo dans le dossier ' Portraits_a_analyser '.")
-    # poz=input("\n           ...Quand c'est fait, appuyez sur Entrée.. : ")
     os.chdir(Lieu+"/Portraits_a_analyser")
     list_fichiers=os.listdir('.')
     longueur_list_fichiers=len(list_fichiers)
@@ -659,14 +524,11 @@ def Analyse_une_nouvelle_photo():
     print()
     for l in range(longueur_list_fichiers):
         long_list_fichiers=len(list_fichiers[l])
-
         fin_nom_fichier_lu=list_fichiers[l][long_list_fichiers-4:long_list_fichiers]
         Deb_nom_fichier_lu=list_fichiers[l][0:2]
-
         if fin_nom_fichier_lu==".png" or fin_nom_fichier_lu==".jpg":
             if Deb_nom_fichier_lu!="~$":
                 rien = 1
-                # print("            * Choix N°",l+1,": ",list_fichiers[l],".")
             else:
                 z=1
         else:
@@ -676,7 +538,6 @@ def Analyse_une_nouvelle_photo():
     list_fichiers = [" _ "] + list_fichiers
     Align_Horizontal_Vignet(list_fichiers)
     ####
-    # list_fichiers.append(" _ ")
     Choix_Photo=widgets.RadioButtons(
                 options=list_fichiers,
         value=" _ ",
@@ -685,13 +546,8 @@ def Analyse_une_nouvelle_photo():
     Choix_Photo.observe(Analyse_une_nouvelle_photo_suite,names='value')
     ###########################################
     display(Choix_Photo) 
-
     ##################################################################"
 def Analyse_une_serie_de_photo_enrichissement_Base_de_donnees():
-    # elif reponse==2:
-#     print("""\n Placer toutes vos nouvelles photos dans le dossier ' Portraits_a_analyser '
-#           en retirant celles que vous ne souhaitez pas analyser.""")
-#     poz=input("\n           ...Quand c'est fait, appuyez sur Entrée.. : ")
     os.chdir(Lieu+"/Portraits_a_analyser")
     list_fichiers=os.listdir('.')
     longueur_list_fichiers=len(list_fichiers)
@@ -706,17 +562,13 @@ def Analyse_une_serie_de_photo_enrichissement_Base_de_donnees():
         print("\n     --> Voici le résultat des analyses graphiques :")
         affich_image("newmat.jpg")
         affich_image("newmat_vert.jpg")
-    #            quest=input("""\n    (En fonction de la qualité des positionnements des lignes horizontales et verticales caractéristiques du visage),
-    #                          Souhaitez vous enregistrer cette analyse dans la base de données ? (o/n) : """)
-        quest="o"  ###### à enlever si on veut que soit poser la question précédente.. c'est pour gagner du temps
+        quest="o" 
         quest=quest.lower()
         if quest=="n":
             z=1
         else:
             os.chdir(Lieu+"/Base_de_Donnees")
-            ## cv.imwrite(Nom4, newmatrice)
             newmatrice.save(Nom4, "JPEG")
-            ## cv.imwrite(Nom4_vert, newmatrice_vert)
             newmatrice_vert.save(Nom4_vert, "JPEG")
             os.chdir(Lieu+"/Portraits_a_analyser")
             fichier=Nom4
@@ -728,7 +580,6 @@ def Analyse_une_serie_de_photo_enrichissement_Base_de_donnees():
             print("""  ==>  Voici la liste des distances (raccourcies par""",mini,""") entre les lignes horizontales :
                 """,list6,"""
                 : Cela constitue le matricule d'identification horizontal de cette photo.""")
-    #                poz=input("\n                   .. Appuyez sur Entrée : ")
             ######################################################################################
             fichier=Nom4_vert
             mode=2
@@ -739,9 +590,6 @@ def Analyse_une_serie_de_photo_enrichissement_Base_de_donnees():
             print("""  ==>  Voici la liste des distances (raccourcies par""",mini_vert,""") entre les lignes verticales :
                 """,list6_vert,"""
                 : Cela constitue le matricule d'identification vertical de cette photo.""")
-    #                poz=input("\n                   .. Appuyez sur Entrée : ")
-
-
     #######################################################################################################################"
     #####################""   Test s'il y a déjà un élément en base de donnée ?
             Presence_BD=0
@@ -749,7 +597,6 @@ def Analyse_une_serie_de_photo_enrichissement_Base_de_donnees():
                 New_Baz_Donnees_Photos=[Photo_initiale,list6,Nom4,mini,hauteur_image,list6_vert,Nom4_vert,mini_vert,hauteur_image_vert]
                 ###########################################
                 Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
-                #pickle_in=open("C:/Users/dfial/Desktop/Travail_Python/Image/Photographie_Num/Py_Face/Base_de_Donnees/Baz_Analyz_Photos.pickle","rb")
                 pickle_in=open(Name_local_baz,"rb")
                 Baz_Donnees_Photos_lu=pickle.load(pickle_in)
                 pickle_in.close()
@@ -767,11 +614,8 @@ def Analyse_une_serie_de_photo_enrichissement_Base_de_donnees():
                 pickle_out=open(Name_local_baz,"wb+")
                 pickle.dump(Baz_Donnees_Photos_init,pickle_out)
                 pickle_out.close()
-
                 #####################################"""
-
             else:
-
                 New_Baz_Donnees_Photos=[Photo_initiale,list6,Nom4,mini,hauteur_image,list6_vert,Nom4_vert,mini_vert,hauteur_image_vert]
                 ###########################################
                 Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
@@ -779,25 +623,17 @@ def Analyse_une_serie_de_photo_enrichissement_Base_de_donnees():
                 pickle_in=open(Name_local_baz,"rb")
                 Baz_Donnees_Photos_lu=pickle.load(pickle_in)
                 pickle_in.close()
-    #                print("Voici ce qu'il y a pour l'instant dans la base de données :",Baz_Donnees_Photos_lu)
-    #                poz=input("pause1")
                 Baz_Donnees_Photos_lu.append(New_Baz_Donnees_Photos)
                 ############################################""
                 Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
-                #pickle_out=open("C:/Users/dfial/Desktop/Travail_Python/Image/Photographie_Num/Py_Face/Base_de_Donnees/Baz_Analyz_Photos.pickle","wb+")
                 pickle_out=open(Name_local_baz,"wb+")
                 pickle.dump(Baz_Donnees_Photos_lu,pickle_out)
                 pickle_out.close()
-    #                poz=input("pause2 après avoir enregistré le 2ème enregistrement")
-
 #####################################################
 def Choix_Photo_de_base():
-    # elif reponse==4:
-#     try:
     os.chdir(Lieu)
     affich_image("Logo4.jpg")
     Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
-    #pickle_in=open("C:/Users/dfial/Desktop/Travail_Python/Image/Photographie_Num/Py_Face/Base_de_Donnees/Baz_Analyz_Photos.pickle","rb")
     pickle_in=open(Name_local_baz,"rb")
     Baz_Donnees_Photos_lu=pickle.load(pickle_in)
     pickle_in.close()
@@ -812,8 +648,6 @@ def Choix_Photo_de_base():
     Liste_Photos = [" _ "]
     for tt in range(long_Baz_Donnees_Photos_lu):
         Liste_Photos.append(  Baz_Donnees_Photos_lu[tt][0]   )
-#                 print("                      * Titre : ",Baz_Donnees_Photos_lu[tt][0]  ) #,"   -->   N°_",tt+1)
-
     Align_Horizontal_Vignet(Liste_Photos)
     ####
     Choix_Photo=widgets.RadioButtons(
@@ -824,15 +658,10 @@ def Choix_Photo_de_base():
     Choix_Photo.observe(Input_choix_Photo_Compare,names='value')
     ###########################################
     display(Choix_Photo)            
-
-    ####
 ################################
     print("\nCliquez sur l'identifiant de la photo qui sera comparée à toute votre base de donnée : ")
-
 ####################################
 def Reconnaissance_Faciale(Photo_Compar_Base):   
-#     global Photo_Compar_Base
-    
     Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
     pickle_in=open(Name_local_baz,"rb")
     Baz_Donnees_Photos_lu=pickle.load(pickle_in)
@@ -855,7 +684,6 @@ def Reconnaissance_Faciale(Photo_Compar_Base):
             else:
                 matricule_comparaison=Baz_Donnees_Photos_lu[numer-1][1]
                 matricule_comparaison_vert=Baz_Donnees_Photos_lu[numer-1][5]
-#                print("on étudie le matricule de comparaison :",matricule_comparaison)
 ##############################################################################################################################################################
 ##############################################################################################################################################################
                 list8=[]
@@ -863,76 +691,29 @@ def Reconnaissance_Faciale(Photo_Compar_Base):
                     if numer-1==uu:
                         z=1
                     else:
-#                        print("uu=",uu)
                         list7=[]
-
                         matricule_BaseDonnée=Baz_Donnees_Photos_lu[uu][1]
-#                        print("matricule_BaseDonnée=",matricule_BaseDonnée)
                         long_matricule_BaseDonnée=len(matricule_BaseDonnée)
                         long_matricule_comparaison=len(matricule_comparaison)
                         avance2=0
                         aa=0
                         while aa!=long_matricule_comparaison:
-    #                        print("long_matricule_BaseDonnée=",long_matricule_BaseDonnée)
-    #                        print("avance2=",avance2)
-    #                        print("aa=",aa)
-    #                        poz=input()
                             while avance2!=long_matricule_BaseDonnée:
-    #                            print("on a avance2 (",avance2,") différent de long_matricule_BaseDonnée qui est égal à",long_matricule_BaseDonnée)
-    #                            poz=input()
-
-#                                print("aa=",aa)
-#                                print("avance2=",avance2)
-#                                poz=input("attention")
-#                                print("matricule_comparaison=",matricule_comparaison)
-#                                print("matricule_comparaison[aa]=..")
-#                                print(matricule_comparaison[aa])
-#                                print()
-#                                poz=input("attention2")
-#                                print("matricule_BaseDonnée[avance2]=",matricule_BaseDonnée[avance2])
-#                                poz=input("attention3")
                                 rapp1=matricule_comparaison[aa]/matricule_BaseDonnée[avance2]
-
                                 if rapp1>0.999 and rapp1<1.001:
-    #                                print("on a matricule_comparaison[aa]",matricule_comparaison[aa],"==matricule_BaseDonnée[avance2]=",matricule_BaseDonnée[avance2])
-    #                                print("j'ajoute matricule_comparaison[aa] à list7")
                                     list7.append(matricule_comparaison[aa])
-                        #            aa+=1
-                        #            print("j'ai augmenté aa de 1 qui devient :",aa)
-    #                                print("list7 devient : ", list7)
-    #                                print("et j'efface l'élément de matricule_BaseDonnée")
                                     del matricule_BaseDonnée[avance2]
-    #                                print("matricule_BaseDonnée devient : ",matricule_BaseDonnée)
                                     long_matricule_BaseDonnée=len(matricule_BaseDonnée)
-    #                                print("la longueur de matricule_BaseDonnée est",long_matricule_BaseDonnée)
-    #                                poz=input()
                                     avance2=long_matricule_BaseDonnée
                                 else:
-    #                                print("""on n'a pas matricule_BaseDonnée[avance2]=""",matricule_BaseDonnée[avance2],""" =à matricule_comparaison[aa]=""",matricule_comparaison[aa],"""
-    #                                      donc j'augmente avance2""")
                                     avance2+=1
-    #                                print("avance2 devient :",avance2)
-    #                                poz=input()
                             avance2=0
                             aa+=1
-    #                        print("jai augmenté aa qui devient ",aa)
-#                        print(list7)
                         long_list7=len(list7)
-#                        poz=input("pauseeeeee!!!!")
-
-
-
-
-
-#                        print("il y a",long_list7,"espacements identiques entre la photo choisie '",Baz_Donnees_Photos_lu[numer-1][0],"' et cette photo '",Baz_Donnees_Photos_lu[uu][0]," :",list7)
                         somme=Baz_Donnees_Photos_lu[numer-1][3]*(sum(list7))
                         recouvr=round((somme/Baz_Donnees_Photos_lu[numer-1][4])*100,1)
-#                        print("  ..            soit",recouvr,"% de recouvrement, avec mini=",Baz_Donnees_Photos_lu[numer-1][3],"et hauteur=",Baz_Donnees_Photos_lu[numer-1][4])
-#                        poz=input("\n                                    Appuyez sur Entrée : ")
                         listoc=[recouvr,Baz_Donnees_Photos_lu[uu][0],Baz_Donnees_Photos_lu[uu][1],Baz_Donnees_Photos_lu[uu][2]]
                         list8.append(listoc)
-#                print("fini. Voici la liste 8 non triée :",list8)
-#                poz=input("...")
                 list8.sort(reverse=True)
 #############################################################################################################################################################
                 list8_vert=[]
@@ -940,79 +721,30 @@ def Reconnaissance_Faciale(Photo_Compar_Base):
                     if numer-1==uu:
                         z=1
                     else:
-#                        print("uu=",uu)
                         list7_vert=[]
                         matricule_BaseDonnée_vert=Baz_Donnees_Photos_lu[uu][5]
-#                        print("matricule_BaseDonnée=",matricule_BaseDonnée)
                         long_matricule_BaseDonnée_vert=len(matricule_BaseDonnée_vert)
                         long_matricule_comparaison_vert=len(matricule_comparaison_vert)
                         avance2=0
                         aa=0
                         while aa!=long_matricule_comparaison_vert:
-    #                        print("long_matricule_BaseDonnée=",long_matricule_BaseDonnée)
-    #                        print("avance2=",avance2)
-    #                        print("aa=",aa)
-    #                        poz=input()
                             while avance2!=long_matricule_BaseDonnée_vert:
-    #                            print("on a avance2 (",avance2,") différent de long_matricule_BaseDonnée qui est égal à",long_matricule_BaseDonnée)
-    #                            poz=input()
-
-#                                print("aa=",aa)
-#                                print("avance2=",avance2)
-#                                poz=input("attention")
-#                                print("matricule_comparaison=",matricule_comparaison)
-#                                print("matricule_comparaison[aa]=..")
-#                                print(matricule_comparaison[aa])
-#                                print()
-#                                poz=input("attention2")
-#                                print("matricule_BaseDonnée[avance2]=",matricule_BaseDonnée[avance2])
-#                                poz=input("attention3")
                                 rapp1=matricule_comparaison_vert[aa]/matricule_BaseDonnée_vert[avance2]
-
                                 if rapp1>0.999 and rapp1<1.001:
-    #                                print("on a matricule_comparaison[aa]",matricule_comparaison[aa],"==matricule_BaseDonnée[avance2]=",matricule_BaseDonnée[avance2])
-    #                                print("j'ajoute matricule_comparaison[aa] à list7")
                                     list7_vert.append(matricule_comparaison_vert[aa])
-                        #            aa+=1
-                        #            print("j'ai augmenté aa de 1 qui devient :",aa)
-    #                                print("list7 devient : ", list7)
-    #                                print("et j'efface l'élément de matricule_BaseDonnée")
                                     del matricule_BaseDonnée_vert[avance2]
-    #                                print("matricule_BaseDonnée devient : ",matricule_BaseDonnée)
                                     long_matricule_BaseDonnée_vert=len(matricule_BaseDonnée_vert)
-    #                                print("la longueur de matricule_BaseDonnée est",long_matricule_BaseDonnée)
-    #                                poz=input()
                                     avance2=long_matricule_BaseDonnée_vert
                                 else:
-    #                                print("""on n'a pas matricule_BaseDonnée[avance2]=""",matricule_BaseDonnée[avance2],""" =à matricule_comparaison[aa]=""",matricule_comparaison[aa],"""
-    #                                      donc j'augmente avance2""")
                                     avance2+=1
-    #                                print("avance2 devient :",avance2)
-    #                                poz=input()
                             avance2=0
                             aa+=1
-    #                        print("jai augmenté aa qui devient ",aa)
-#                        print(list7)
                         long_list7_vert=len(list7_vert)
-#                        poz=input("pauseeeeee!!!!")
-
-
-
-
-
-#                        print("il y a",long_list7,"espacements identiques entre la photo choisie '",Baz_Donnees_Photos_lu[numer-1][0],"' et cette photo '",Baz_Donnees_Photos_lu[uu][0]," :",list7)
                         somme_vert=Baz_Donnees_Photos_lu[numer-1][7]*(sum(list7_vert))
                         recouvr_vert=round((somme_vert/Baz_Donnees_Photos_lu[numer-1][8])*100,1)
-#                        print("  ..            soit",recouvr,"% de recouvrement, avec mini=",Baz_Donnees_Photos_lu[numer-1][3],"et hauteur=",Baz_Donnees_Photos_lu[numer-1][4])
-#                        poz=input("\n                                    Appuyez sur Entrée : ")
                         listoc_vert=[recouvr_vert,Baz_Donnees_Photos_lu[uu][0],Baz_Donnees_Photos_lu[uu][5],Baz_Donnees_Photos_lu[uu][6]]
                         list8_vert.append(listoc_vert)
-#                print("fini. Voici la liste 8 non triée :",list8)
-#                poz=input("...")
                 list8_vert.sort(reverse=True)
-##############################################################################################################################################################
-##############################################################################################################################################################
-##############################################################################################################################################################
 ##############################################################################################################################################################
                 os.chdir(Lieu+"/Base_de_Donnees")
                 print("\n        --> Voici la photo étudiée :")
@@ -1022,73 +754,45 @@ def Reconnaissance_Faciale(Photo_Compar_Base):
                 print("\n****************************************************************************************************")
                 print("\n****************************************************************************************************")
                 print("          ==> Voici les résultats, du plus au moins ressemblant :")
-#                 poz=input("Tapez Entrée : ")
                 long_list8=len(list8)
                 long_list8_vert=len(list8_vert)
                 list9=[]
-
                 for jkl in range(long_list8):
-
                     ego=0
-
                     for klm in range(long_list8_vert):
-
                         if list8[jkl][1]==list8_vert[klm][1]:
-
                             new_val=list8[jkl][0]+list8_vert[klm][0]
-
                             listic=[new_val,list8[jkl][1],list8[jkl][2],list8[jkl][3],list8_vert[klm][2],list8_vert[klm][3]]
-
                             list9.append(listic)
-
                             ego=1
-
                         else:
                             if klm==long_list8_vert-1:
-
                                 if ego==0:
-
                                     listic=[list8[jkl][0],list8[jkl][1],list8[jkl][2],list8[jkl][3]]
-
                                     list9.append(listic)
-
-
                                 else:
                                     z=1
-
                             else:
                                 z=1
-
-
                 for klm in range(long_list8_vert):
-
                     vu=0
-
                     for jkl in range(long_list8):
-
                         if list8_vert[klm][1]!=list8[jkl][1]:
-
                             if jkl==long_list8-1:
-
                                 if vu==0:
                                     listic=[list8_vert[klm][0],list8_vert[klm][1],list8_vert[klm][2],list8_vert[klm][3]]
-
                                     list9.append(listic)
-
                                 else:
                                     vu=0
                             else:
                                 z=1
-
                         else:
                             z=1
                             vu=1
 #####################################################################################################"
                 list9.sort(reverse=True)
                 long_list9=len(list9)
-
                 for oo in range(long_list9):
-
                     print("\n                  **",list9[oo][0],"% de ressemblance : Titre : ",list9[oo][1])
                     affich_image(list9[oo][3])
                     try:
@@ -1096,71 +800,26 @@ def Reconnaissance_Faciale(Photo_Compar_Base):
                     except IndexError:
                         z=1
                     print("\n****************************************************************************************************")
-#                     poz=input("                           * * * * *     Voulez-vous voir la suite qui possède un plus faible % de ressemblance ? (o/n) : ")
-#                     poz=poz.lower()
-#                     if poz=="o":
-#                         z=1
-#                     else:
-#                         break
-#                 poz=input("                               --------> Fin de la comparaison avec la base de donnée. Tapez Entrée : ")
                 print("                               --------> Fin de la comparaison avec la base de donnée. Tapez Entrée : ")
-
         except ValueError:
             print("Désolé, je n'ai pas compris.. ")
-            poz=input("                                  .. Tapez Entrée : ")
-
-
-# except FileNotFoundError:
-#     rep=input("   **   Désolé..  La base de donnée est vide pour l'instant.    Tapez Entrée : ")
-
-
-# ######################################################################################################################################################################################
+######################################################################################################################################################################################
 def Input_choix_Gestion(change):
     Choix_gestion = change['new']
     if Choix_gestion == "1":
         Choix_gestion_1()
     elif Choix_gestion == "2":
         Choix_gestion_2()
-    # print()
-    # print("Récupération du choix = ",Photo_Compar_Base)
-    # Reconnaissance_Faciale(Photo_Compar_Base)
-#     return Photo_Compar_Base
 ###################################################################
 def Visualiser_Base_de_donnees():
-    # elif reponse==3:
-    # print()
-    # contin=0
-    # while contin==0:
     os.chdir(Lieu)
     affich_image("Logo3.jpg")
     Choix_gestion_1()
-    # print()
-    # print("Vous pouvez : ")
-    # # print("\n            * Choix N° 0 :  Quitter.")
-    # print("\n            * Choix N° 1 :  Visualiser le contenu de la base de données. ")
-    # print("            * Choix N° 2 :  Effacer des éléments de la base de données.")
-    # print()
-    # rep=input("\n            --> : ")
-    # rep=int(rep)
-    # if rep==0:
-    #     contin=1
-    ####
-    # list_choix_gestion = [" _ ", "1", "2"]
-    # Choix_gestion=widgets.RadioButtons(
-    #             options=list_choix_gestion,
-    #     value=" _ ",
-    #             layout={'width': 'max-content'}
-    #         )
-    # Choix_gestion.observe(Input_choix_Gestion,names='value')
-    # ###########################################
-    # display(Choix_gestion)
 ###################################################################
 def Choix_gestion_1():
-# elif rep==1:
     ###########################################""
     try:
         Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
-        #pickle_in=open("C:/Users/dfial/Desktop/Travail_Python/Image/Photographie_Num/Py_Face/Base_de_Donnees/Baz_Analyz_Photos.pickle","rb")
         pickle_in=open(Name_local_baz,"rb")
         Baz_Donnees_Photos_lu=pickle.load(pickle_in)
         pickle_in.close()
@@ -1174,28 +833,18 @@ def Choix_gestion_1():
             affich_image(Name_horizon)
             Name_vertical=Baz_Donnees_Photos_lu[tt][6]
             affich_image(Name_vertical)
-#                        poz=input("                                                                         --> Tapez Entrée pour voir le suivant : ")
         os.chdir(Lieu)
-        # print("\n Il n'y a plus d'autres éléments dans la base de donnée.")
-        # poz=input("\n Remontez l'écran pour visualiser toutes les photos et noter les N°.. puis, Tapez Entrée.. : ")
     except FileNotFoundError:
         print("   **   Désolé..  La base de donnée est vide pour l'instant.")
-
 ################################################################
 ##############################################################################
 def Input_choix_Donnees_Photo_Suprim(change):
     Num_photo_Donnee_suprim = change['new']
     Suprim_Donnee_photo_num(Num_photo_Donnee_suprim)
-    # print()
-    # print("Récupération du choix = ",Photo_Compar_Base)
-    # Reconnaissance_Faciale(Photo_Compar_Base)
-#     return Photo_Compar_Base
 ###################################################################
 def Supprimer_element_Base_de_donnees():
-# elif rep==2:
     try:
         Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
-        #pickle_in=open("C:/Users/dfial/Desktop/Travail_Python/Image/Photographie_Num/Py_Face/Base_de_Donnees/Baz_Analyz_Photos.pickle","rb")
         pickle_in=open(Name_local_baz,"rb")
         Baz_Donnees_Photos_lu=pickle.load(pickle_in)
         pickle_in.close()
@@ -1216,51 +865,25 @@ def Supprimer_element_Base_de_donnees():
         Choix_num_suprim.observe(Input_choix_Donnees_Photo_Suprim,names='value')
         ###########################################
         display(Choix_num_suprim)
-        # question=question.lower()
-        # if question=="q":
-        #     contin=1
-        # else:
     except FileNotFoundError:
         print("   **   Désolé..  Un ou plusieurs fichiers nont pas été trouvé...")       
 def Suprim_Donnee_photo_num(Num_photo_Donnee_suprim):
     question = Num_photo_Donnee_suprim
     Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
-    #pickle_in=open("C:/Users/dfial/Desktop/Travail_Python/Image/Photographie_Num/Py_Face/Base_de_Donnees/Baz_Analyz_Photos.pickle","rb")
     pickle_in=open(Name_local_baz,"rb")
     Baz_Donnees_Photos_lu=pickle.load(pickle_in)
     pickle_in.close()
     long_Baz_Donnees_Photos_lu = len(Baz_Donnees_Photos_lu)
     print("Vous avez demandé à supprimer les données de la photo N°",question," : ",Baz_Donnees_Photos_lu[question-1][0])
-    # print("Baz_Donnees_Photos_lu[question-1] = ",Baz_Donnees_Photos_lu[question-1])
     del Baz_Donnees_Photos_lu[question-1]
-    # print("Données effacées du tableau")
     try:
-        # print("coucou")
-        # question=int(question)
         if question<1 or question>long_Baz_Donnees_Photos_lu:
             print("\n Désolé, je n'ai pas compris... ")
         else:
-            # print("Dans else...")
-            # print("\n **** Vous souhaitez vraiment effacer les données sur la photo nommée",Baz_Donnees_Photos_lu[question-1][0],"? (o/n)")
-            # vraiment=input("\n                                                                       _ _ _  : ")
-            # vraiment=vraiment.lower()
-            # if vraiment=="n":
-            #     contin=1
-            # elif vraiment=="o":
-
-
-            # Name_local_baz=Lieu+"/Base_de_Donnees/Baz_Analyz_Photos.pickle"
             Name_local_baz = "/drive/Base_de_Donnees/Baz_Analyz_Photos.pickle"
-            #pickle_out=open("C:/Users/dfial/Desktop/Travail_Python/Image/Photographie_Num/Py_Face/Base_de_Donnees/Baz_Analyz_Photos.pickle","wb+")
             pickle_out=open(Name_local_baz,"wb+")
             pickle.dump(Baz_Donnees_Photos_lu,pickle_out)
             pickle_out.close()
             print("... ça y est, la donnée a été supprimée.")
-#             else:
-#                 poz=input("\n Désolé, je n'ai pas compris... Recommencez : ")
     except ValueError:
         print("\n Désolé, je n'ai pas pu supprimer la photo...")
-
-
-###################################
-
